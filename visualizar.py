@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+import matplotlib.pyplot as plt
 from typing import Any
 
 
@@ -282,11 +282,75 @@ def ejecutar_busqueda(arreglo: list[int], objetivo: int) -> None:
     print(f"Total de llamadas: {total_llamadas}")
 
 
+
+import matplotlib.pyplot as plt
+
 if __name__ == "__main__":
-    ejecutar_fibonacci(6)
+
+    # LISTAS PARA la GRAFICA
+
+    valores_n = []
+    llamadas_normal = []
+    llamadas_memoria = []
+    llamadas_busqueda = []
+
+    for n in range(1, 20):
+
+        print(f"\n===== n = {n} =====")
+
+        # Fibonacci normal
+        _, _, total_llamadas = fibonacci_recursivo(n)
+
+        # Fibonacci memoización
+        _, _, total_llamadas_mem = fibonacci_recursivo_memoria(n, {})
+
+        # Búsqueda binaria
+        arreglo = list(range(1, n + 1))
+        objetivo = -1 
+
+        _, _, total_llamadas_busq = busqueda_binaria_arbol(
+            arreglo,
+            objetivo,
+            0,
+            len(arreglo) - 1
+        )
+
+        # guardar los puntos
+        valores_n.append(n)
+        llamadas_normal.append(total_llamadas)
+        llamadas_memoria.append(total_llamadas_mem)
+        llamadas_busqueda.append(total_llamadas_busq)
+
+    # GRAFICA
+
+    plt.figure()
+
+    plt.plot(valores_n, llamadas_normal,
+             marker='o', label="Fibonacci Recursivo")
+
+    plt.plot(valores_n, llamadas_memoria,
+             marker='s', label="Fibonacci Memoización")
+
+    plt.plot(valores_n, llamadas_busqueda,
+             marker='^', label="Búsqueda Binaria")
+
+    plt.xlabel("n")
+    plt.ylabel("Número de llamadas")
+    plt.title("Comparación de Complejidad de Algoritmos")
+
+    plt.legend()
+    plt.grid(True)
+
+    plt.show()
 
     print("\n" + "#" * 70 + "\n")
 
-    arreglo_prueba = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+    # EJECUCION NORMAL
+
+    arreglo_prueba = [
+        1,2,3,4,5,6,7,8,9,10,
+        11,12,13,14,15,16,17,18,19,20
+    ]
+
     objetivo_prueba = 6
     ejecutar_busqueda(arreglo_prueba, objetivo_prueba)
