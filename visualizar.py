@@ -281,10 +281,6 @@ def ejecutar_busqueda(arreglo: list[int], objetivo: int) -> None:
     print(f"Indice encontrado: {resultado}")
     print(f"Total de llamadas: {total_llamadas}")
 
-
-
-import matplotlib.pyplot as plt
-
 if __name__ == "__main__":
 
     # LISTAS PARA la GRAFICA
@@ -293,20 +289,30 @@ if __name__ == "__main__":
     llamadas_normal = []
     llamadas_memoria = []
     llamadas_busqueda = []
+    tamanios_busqueda = []
 
-    for n in range(1, 20):
+    # FIBONACCI 
+    for n in range(1, 30):
 
-        print(f"\n===== n = {n} =====")
-
-        # Fibonacci normal
+        # Fibonacci 
+        # Normal
         _, _, total_llamadas = fibonacci_recursivo(n)
 
-        # Fibonacci memoización
+        # Memoización
         _, _, total_llamadas_mem = fibonacci_recursivo_memoria(n, {})
 
-        # Búsqueda binaria
-        arreglo = list(range(1, n + 1))
-        objetivo = -1 
+        # guardar los puntos
+        valores_n.append(n)
+        llamadas_normal.append(total_llamadas)
+        llamadas_memoria.append(total_llamadas_mem)
+
+    # BÚSQUEDA BINARIA 
+    for n in range(1, 20):
+
+        # Búsqueda binaria 
+        tamanio_arreglo = 2 ** n
+        arreglo = list(range(1, tamanio_arreglo + 1))
+        objetivo = -1
 
         _, _, total_llamadas_busq = busqueda_binaria_arbol(
             arreglo,
@@ -316,28 +322,28 @@ if __name__ == "__main__":
         )
 
         # guardar los puntos
-        valores_n.append(n)
-        llamadas_normal.append(total_llamadas)
-        llamadas_memoria.append(total_llamadas_mem)
         llamadas_busqueda.append(total_llamadas_busq)
+        tamanios_busqueda.append(tamanio_arreglo)
 
-    # GRAFICA
-
+    # GRAFICA DE FIBONACCI
     plt.figure()
-
     plt.plot(valores_n, llamadas_normal,
              marker='o', label="Fibonacci Recursivo")
-
     plt.plot(valores_n, llamadas_memoria,
              marker='s', label="Fibonacci Memoización")
-
-    plt.plot(valores_n, llamadas_busqueda,
-             marker='^', label="Búsqueda Binaria")
-
     plt.xlabel("n")
     plt.ylabel("Número de llamadas")
-    plt.title("Comparación de Complejidad de Algoritmos")
+    plt.title("Fibonacci: Recursivo vs Memoización")
+    plt.legend()
+    plt.grid(True)
 
+    # GRAFICA DE BUSQUEDA BINARIA
+    plt.figure()
+    plt.plot(tamanios_busqueda, llamadas_busqueda,
+             linestyle='-', color='tab:green', label="Búsqueda Binaria")
+    plt.xlabel("Tamaño del arreglo")
+    plt.ylabel("Número de llamadas")
+    plt.title("Búsqueda Binaria: llamadas vs tamaño del arreglo")
     plt.legend()
     plt.grid(True)
 
@@ -345,12 +351,6 @@ if __name__ == "__main__":
 
     print("\n" + "#" * 70 + "\n")
 
-    # EJECUCION NORMAL
-
-    arreglo_prueba = [
-        1,2,3,4,5,6,7,8,9,10,
-        11,12,13,14,15,16,17,18,19,20
-    ]
-
+    arreglo_prueba = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     objetivo_prueba = 6
     ejecutar_busqueda(arreglo_prueba, objetivo_prueba)
